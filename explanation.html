@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<title>WonkDen</title>
+
+
+		<link rel="stylesheet" type="text/css" href="site.style.css" media="all">
+		<link rel="stylesheet" type="text/css" href="print.css"      media="print">
+	</head>
+	<body>
+		<div class="sidebar">
+			<!--#include file="sidebar.html" -->
+		</div>
+		<div class="content">
+			<p>
+			It is what is commonly called a <a href="http://en.wikipedia.org/wiki/JAPH">JAPH</a>.
+			A purposefully obfuscated piece of Perl code that prints out an innocuous string.  
+			So, how does it work? Well, here is the code:
+			</p>
+		       	<pre>
+print chr ord scalar qw eof write and
+print qq pop xor print chr ord qq and
+quotemeta xor lc print chr ord scalar
+qw seek fork x keys and print chr ord
+reverse q each y binmode xor uc print
+chr ord q defined and int srand print
+chr ord reverse q kill hex print link
+and print chr oct ord sqrt oct uc ord
+scalar qw pack dump xor print chr ord
+reverse q do rand xor print chr ord q
+read qr xor print chr int ord reverse
+qw fileno s printf and print chr sqrt
+ord reverse q each chomp pack binmode</pre>
+			<p>
+			Let's take off the first level of obfuscation: the quote operators.  The operators
+			qw, qq, and q quote the text between a delimiter.  Space cannot be a delimiter,
+			so it uses the first non-space character as the delimiter.  Here is the code after 
+			the effects of the quote operators:
+			</p>
+<pre>
+print chr ord scalar ('of', 'writ') and
+print "o" xor print chr ord "nd
+quotemet" xor lc print chr ord scalar
+('eek', 'fork', 'x', 'key') and print chr ord
+reverse 'ach y binmod' xor uc print
+chr ord 'efine' and int srand print
+chr ord reverse 'ill hex print lin'
+and print chr oct ord sqrt oct uc ord
+scalar ('ack', 'dum') xor print chr ord
+reverse 'o ran' xor print chr ord 
+'ead q' xor print chr int ord reverse
+('ileno', 's', 'print') and print chr sqrt
+ord reverse 'ach chomp pack binmod'</pre>
+			<p>
+			It is still pretty ugly, but we can start to see the structure.  The next layer 
+			is the lack of discrete statements.  The xor and and operators must execute both 
+			sides if the first side is true.  All of the statements are true, so xor and and 
+			are acting as semicolons.  Here is the code after replacing the xor and and operators
+			with semicolons:
+			</p>
+<pre>
+print chr ord scalar ('of', 'writ');
+print "o";
+print chr ord "nd
+quotemet";
+lc print chr ord scalar ('eek', 'fork', 'x', 'key');
+print chr ord reverse 'ach y binmod';
+uc print chr ord 'efine';
+int srand print chr ord reverse 'ill hex print lin';
+print chr oct ord sqrt oct uc ord scalar ('ack', 'dum');
+print chr ord reverse 'o ran';
+print chr ord 'ead q';
+print chr int ord reverse ('ileno', 's', 'print');
+print chr sqrt ord reverse 'ach chomp pack binmod'</pre>
+			<p>
+			The next step takes advantage of the fact that a list in scalar context
+			resolves to the list item.  So, <code>scalar ('of', 'writ')</code> is
+			<code>'writ'</code>.  The reverse function in scalar context also
+			forces scalar context on a list passed to it. So, after applying that 
+			knowledge we get:</p>
+<pre>
+print chr ord 'writ';
+print "o";
+print chr ord "nd
+quotemet";
+lc print chr ord 'key';
+print chr ord reverse 'ach y binmod';
+uc print chr ord 'efine';
+int srand print chr ord reverse 'ill hex print lin';
+print chr oct ord sqrt oct uc ord 'dum';
+print chr ord reverse 'o ran';
+print chr ord 'ead q';
+print chr int ord 'tnirp';
+print chr sqrt ord 'domnib'</pre>
+			<p>
+			So, now we can see the individual print statements, but it still isn't obvious
+			what they are printing, and what is the deal with the function before the prints
+			on lines five, seven, and eight?  Well, those functions don't have any effect.
+			The lc and uc functions turn 1 into 1 (they only effect alphabetical characters),
+			srand returns 1, and int has no effect on 1 (it turns it into 1).  Most of the rest
+			of the code uses a code like <code>chr ord "string"</code>.  When ord receives
+			a string it only looks at the first character and returns its numeric value in the 
+			native character set.  The chr function does the opposite.  So 
+			<code>chr ord "string"</code> is the same as "s".  Here is the code after getting 
+			rid of the useless functions and collapsing the simple chr/ord combinations:</p>
+<pre>
+print 'w';
+print "o";
+print "n"
+print 'k';
+print 'd';
+print 'e';
+print 'n';
+print chr oct ord sqrt oct uc ord 'dum';
+print 'n';
+print 'e';
+print 't';
+print chr sqrt ord 'domnid'</pre>
+			<p>
+			At this point we can see that it is printing "wonkden", something, "net", and something.
+			The next bit only works on ASCII systems.  The ASCII value of 'd' is 100.  The oct function
+			interprets the value passed into it as a octal number and returns the corresponding decimal
+			number.  The value 100 in octal is 64 in decimal.  The square root of 64 is 8.  The ASCII
+			value of 8 is 56.  The value 56 in octal is 46.  The ASCII character 46 is '.'.  Yeah, that
+			is a long way to go to just get a '.', luckily the next one is a lot simpler.  It starts at
+			100 as well (<code>ord 'd'</code>), but just takes the square root (10) and turns it into 
+			its corresponding ASCII character: the linefeed character.  The PerlIO layer will turn
+			it into whatever the end of line character is on this platform.  So, in the end, all of
+			that code boils down to:
+			</p>
+<pre>
+print "wonkden.net\n";
+</pre>
+		</div>
+		<script type="text/javascript">
+			var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+			document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+		</script>
+		<script type="text/javascript">
+			var pageTracker = _gat._getTracker("UA-2579543-2");
+			pageTracker._initData();
+			pageTracker._trackPageview();
+		</script>
+	</body>
+</html>

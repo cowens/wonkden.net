@@ -1,0 +1,142 @@
+body {
+	color:            black;
+	background-color: white;
+	font-family:      serif;
+}
+
+a {
+	text-decoration: none;
+	color:           black;
+}
+
+.nav {
+	display: none;
+}
+
+.resume {
+	width: 50em;
+}
+
+.header h1 {
+	margin: 0em;
+}
+.header {
+	text-align: center;
+}
+
+.summary {
+	text-align:   justify;
+}
+
+.jobs {
+	text-align:   justify;
+}
+
+.jobs li {
+	list-style:    none;
+	margin-bottom: 1em;
+}
+
+.job {
+	margin-top: 1em;
+}
+
+.jobheader {
+	padding:          1em;
+	font-size:        1.5em;
+	background-color: #E0E0E0;
+	position:         relative;
+	border:           thin;
+	border-color:     black;
+	border-style:     solid;
+}
+
+.joblocation {
+	position: absolute;
+	bottom:   0em;
+	right:    0.2em;
+}
+
+.jobtitle {
+	position: absolute;
+	bottom:   0em;
+	left:     0.2em;
+}
+
+.jobdate {
+	position: absolute;
+	top:      0em;
+	left:     0.2em;
+}
+
+.jobcompany {
+	position: absolute;
+	top:      0em;
+	right:    0.2em;
+}
+
+.jobdescription {
+}
+
+.jobdescription h3 {
+	margin-top:    0em;
+	margin-bottom: 0em;
+}
+
+.jobdescription li {
+	margin-bottom: 0em;
+	list-style:    disc;
+}
+
+.skills {
+	page-break-before: always;
+}
+
+.skills li {
+	list-style: none;
+	margin-top: 1em;
+}
+
+.skills h1 {
+	margin-bottom: 0em;
+}
+
+.skills table {
+	width:            100%;
+	border-width:     1px;
+	border-spacing:   0px;
+	border-style:     solid;
+	border-color:     black;
+	border-collapse:  collapse;
+}
+
+.skills td,th {
+	border-width:     1px;
+	border-spacing:   0px;
+	border-style:     solid;
+	border-color:     black;
+	border-collapse:  collapse;
+}
+
+.skill {
+	width:      16.67em;
+	text-align: left;
+}
+
+.level {
+	width:      16.66em;
+	text-align: center;
+}
+
+.years {
+	width:      16.66em;
+	text-align: center;
+}
+
+.even {
+	background-color: #E0E0E0;
+}
+
+.odd {
+	background-color: white;
+}
