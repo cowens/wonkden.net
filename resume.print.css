@@ -9,12 +9,15 @@ a {
 	color:           black;
 }
 
-.nav {
-	display: none;
+.content {
+	width: 100%;
+	margin-left: 0em;
+	background-color: white;
+	border: none;
 }
 
-.resume {
-	width: 50em;
+.sidebar {
+	display: none;
 }
 
 .header h1 {
