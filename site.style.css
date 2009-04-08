@@ -66,8 +66,33 @@ ul.resumenav {
 	text-decoration: none;
 }
 
+.badge {
+	border: 0;
+}
+
+.contact {
+	background-color: #E0E0E0;
+	padding:          0.25em;
+	border:           thin;
+	border-color:     black;
+	border-style:     solid;
+	margin-bottom:    .25em;
+}
+
+.contact dt {
+	float: left;
+	width: 4.75em;
+	margin: 0em;
+	padding: 0em;
+}
+
+.contact dd {
+	margin: 0em;
+	padding: 0em;
+}
+
 .content {
-	width: 50em;
+	width: 47em;
 	margin-left:      14.25em;
 	background-color: #E0E0E0;
 	padding:          0.25em;
@@ -75,4 +100,9 @@ ul.resumenav {
 	border-color:     black;
 	border-style:     solid;
 	text-align:       justify;
+	margin-bottom:   0.25em;
+}
+
+.webcam {
+	text-align: center;
 }

@@ -144,3 +144,7 @@ a {
 .odd {
 	background-color: white;
 }
+
+.webcam {
+	display: none;
+}
