@@ -1,0 +1,33 @@
+<html>
+	<head>
+		<title>test</title>
+		<style type="text/css">
+		span.foo {
+			display: none
+		}
+		</style>
+		<script type="text/javascript">
+		var display = ["inline", "none"];
+		var state   = 0;
+		function change() {
+			if (document.styleSheets[0].cssRules)
+				rules = document.styleSheets[0].cssRules
+			else if (document.styleSheets[0].rules)
+				rules = document.styleSheets[0].rules
+
+			for (var i = 0; i < rules.length; i++) {
+				if (rules[i].selectorText == "span.foo") {
+					rules[i].style.display = display[state];
+					state = state == 0 ? 1 : 0;
+				}
+			}
+		}
+		</script>
+	</head>
+	<body>
+		<button onclick="change()">click me</button><br />
+		This is a normal sentence<span class="foo">, for some value 
+		of normal</span>.
+	</body>
+</html>
+
