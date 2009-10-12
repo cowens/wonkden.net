@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<Module>
+	<ModulePrefs
+		title        = "Ironman Perl Gadget"
+		title_url    = "http://wonkden.net/ironman_perl_gadget.xml" 
+		height       = "80" 
+		author       = "Chas. Owens" 
+		author_email = "chas.owens@gmail.com"
+	/> 
+	<UserPref
+		name         = "bg"
+		display_name = "Background Color"
+		datatype     = "string"
+		required     = "true"
+	/>
+	<UserPref
+		name         = "ironman-name"
+		display_name = "Ironman Perl name"
+		datatype     = "string"
+		required     = "true"
+	/>
+	<UserPref
+		name         = "ironman-sex"
+		display_name = "Sex"
+		datatype     = "enum"
+		required     = "true"
+	>
+		<EnumValue value="male"   display_value="Male"/>
+		<EnumValue value="female" display_value="Female"/>
+	</UserPref>
+
+	<Content type="html">
+		<![CDATA[
+			<script type="text/javascript">
+				var prefs = new _IG_Prefs();
+				var name  = prefs.getString("ironman-name");
+				var sex   = prefs.getString("ironman-sex"); 
+				var color = prefs.getString("bg"); 
+				var html  = '<div align="center" style="background-color: ' + color + '"><img src="http://ironman.enlightenedperl.org/munger/mybadge/' + sex + '/' + name + '.png" alt="Ironman Perl badge for ' + name + '"></div>'
+
+				document.write(html);
+			</script>   
+		]]>
+	</Content> 
+</Module>
