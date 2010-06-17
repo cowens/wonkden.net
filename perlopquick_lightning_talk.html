@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<!-- 
+  Copyright 2010 Google Inc.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+
+  Original slides: Marcin Wichary (mwichary@google.com)
+  Modifications: Ernest Delgado (ernestd@google.com)
+                 Alex Russell (slightlyoff@chromium.org)
+                 Brad Neuberg
+  Adapted for the perlopquick lightning talk: Chas. Owens (chas.owens@gmail.com)
+-->
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <title>perlopquick: a Perl 5 operator quick reference</title>
+    
+    <style>
+      .notes { display: none; }
+      .stroke {
+        -webkit-text-stroke-color: red;
+        -webkit-text-stroke-width: 1px;
+        -moz-text-stroke-color: red;
+        -moz-text-stroke-width: 1px;
+      }
+      
+      body {
+        font: 14px "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
+        background: #778;
+        padding: 0;
+        margin: 0;
+        overflow: hidden;
+      }
+      
+      div.presentation {
+        position: absolute;
+        width: 100%;
+        display: table-cell;
+        vertical-align: middle;
+        height: 100%;
+        background: inherit;
+      }
+      
+      div.slides {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        left: 0;
+        top: 0;
+        position: absolute;
+        display: block;  
+        -webkit-transition: -webkit-transform 1s ease-in-out; 
+        -moz-transition: -moz-transform 1s ease-in-out;
+        -o-transition: -o-transform 1s ease-in-out;
+      }
+
+      div.slide {
+        display: none;
+        position: absolute;
+        overflow: hidden;
+        width: 900px;
+        height: 700px;
+        left: 50%;
+        top: 50%;
+        margin-top: -350px;
+        background: -webkit-gradient(linear, left bottom, left top, from(#bbd), to(#fff));
+        -webkit-transition: margin 0.25s ease-in-out; 
+        background-color: #eee;
+        background: -moz-linear-gradient(bottom, #bbd, #fff);
+        -moz-transition: margin 0.25s ease-in-out;
+        -o-transition: margin 0.25s ease-in-out;
+      }
+      
+      div.slide:nth-child(even) {
+        border-top-left-radius: 20px;
+        -moz-border-radius-topleft: 20px;
+        -webkit-border-top-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+        -moz-border-radius-bottomright: 20px;
+        -webkit-border-bottom-right-radius: 20px;
+      }
+      
+      div.slide:nth-child(odd) {
+        border-top-right-radius: 20px;
+        -moz-border-radius-topright: 20px;
+        -webkit-border-top-right-radius: 20px;
+        border-bottom-left-radius: 20px;
+        -moz-border-radius-bottomleft: 20px;
+        -webkit-border-bottom-left-radius: 20px;
+      }
+
+      div.slide p {
+        font-size: 20px;
+      }
+
+      section.intro p {
+        font-size: 35px;
+      }
+
+      button {
+        font-size: 20px;
+      }
+      
+      .summary {
+       font-size: 30px;
+      }
+
+      .bullets {
+       font-size: 40px;
+      }
+      
+      .slide.far-past {
+        display: block;
+        margin-left: -2400px;
+      }
+      
+      .slide.past {
+        display: block;
+        margin-left: -1400px;
+      }
+      
+      .slide.current {
+        display: block;
+        margin-left: -450px;
+      }
+      
+      .slide.future {
+        display: block;
+        margin-left: 500px;
+      }
+      
+      .slide.far-future {
+        display: block;
+        margin-left: 1500px;
+      }
+
+      body.three-d div.presentation {
+        /*background: -webkit-gradient(radial, 50% 50%, 10, 50% 50%, 1000, from(#333), to(#000));        */        
+      }
+      
+      body.three-d div.slides {
+        -webkit-transform: translateX(50px) scale(0.8) rotateY(10deg);        
+        -moz-transform: translateX(50px) scale(0.8) rotateY(10deg);
+        -o-transform: translateX(50px) scale(0.8) rotateY(10deg);
+      }
+      
+      
+      /* Content */
+      
+      header {
+        font-family: 'Serif';
+        font-weight: normal;
+        font-size: 50px;
+        letter-spacing: -.05em;
+        color: white;        
+        color: black;
+        text-shadow: rgba(0, 0, 0, 0.2) 0 2px 5px;  
+        position: absolute;
+        left: 30px;
+        top: 25px;
+        margin: 0;
+        padding: 0;
+      }
+      
+      .intro h1 {
+        color: black;
+        padding: 0;
+        margin: 0;
+        letter-spacing: -2px;
+        font-size: 96px;
+      }
+      
+      .intro h2 {
+        color: black;
+        font-family: 'Serif';
+        padding: 0;
+        margin: 0;
+        margin-top: -5px;
+        font-size: 68px;
+        letter-spacing: -1px;  
+      }
+      
+      h1 {
+        display: inline;
+        font-size: 100%;
+      	font-weight: normal;
+      	padding: 0;
+      	margin: 0;
+      }
+      
+      h2 {
+        font-family: 'Serif';
+        color: black;
+        font-size: 20px;
+        margin-left: 20px;
+        margin-top: 50px;
+      }
+      
+      h2:first-child {
+        margin-top: 0;
+      }
+
+      section {
+        font-family: 'Serif';
+        font-size: 50px;
+        color: #3f3f3f;
+        text-shadow: rgba(0, 0, 0, 0.2) 0 2px 5px;         
+        margin-left: 30px;
+        margin-right: 30px;
+        margin-top: 100px;
+        display: block;
+        overflow: hidden;
+      }
+
+      a {
+        color: inherit;
+        display: inline-block;
+        text-decoration: none;
+        line-height: 110%;
+        border-bottom: 2px solid #3f3f3f;
+      }
+
+      #wmap a {
+        line-height: 100%;
+        border-bottom: none;
+      }
+      
+      section.left {
+        float: left;
+        width: 390px;
+      }
+      
+      section.small {
+        font-size: 24px;
+      }
+      
+      section.small ul {
+        margin: 0 0 0 15px;
+        padding: 0;
+      }
+      
+      section.small li {
+        padding-bottom: 0;
+      }
+      
+      h2 {
+        padding: 0;
+        margin: 15px 0 5px 0;
+/*        font-family: GG240;*/
+      }
+      
+      section.center {
+        line-height: 180%;
+        text-align: center;
+        display: table-cell;
+        vertical-align: middle;
+        height: 700px;
+        width: 900px;
+      }
+
+      code {
+        font-family: DejaVuSansMono, Monaco, Courier, Monospace;
+        background: rgb(200, 200, 200);
+        border-radius: 8px;
+      }
+      
+      pre {
+        text-align: left;
+        font-size: 16px;
+        font-family: DejaVuSansMono, Monaco, Courier, Monospace;
+        padding-bottom: 10px;
+        
+        padding: 10px 20px;
+        background: rgba(255, 0, 0, 0.05);
+        border-radius: 8px;
+        border: 1px solid rgba(255, 0, 0, 0.2);
+      }
+      .two-column {
+        -webkit-column-count: 2;
+        -moz-column-count: 2;
+      }
+      
+      pre select {
+        font-size: 16px;
+        font-family: DejaVuSansMono, Monaco, Courier, Monospace;
+        border: 1px solid #c61800;        
+      }
+        
+      input {
+        font-size: 16px;
+        font-family: Helvetica;
+        padding: 3px;
+      }
+      input[type="range"] {
+        width: 100%;
+      }
+      
+      button {
+        font-family: Verdana;
+      }
+      
+      button.large {
+        font-size: 32px;        
+      }
+        
+      pre b {
+        font-weight: normal;
+        color: #c61800;
+        text-shadow: #c61800 0 0 1px; 
+        /*letter-spacing: -1px;*/
+      }
+      pre em {
+        font-weight: normal;
+        font-style: normal;
+        color: #18a600;
+        text-shadow: #18a600 0 0 1px; 
+      }
+      pre input[type="range"] {
+        height: 6px;
+        cursor: pointer;
+        width: auto;
+      }      
+      example {
+        font-size: 16px;
+        display: block;
+        padding: 10px 20px;
+        color: black;
+        background: rgba(255, 255, 255, 0.4);
+        border-radius: 8px;
+        margin-bottom: 10px;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+      }
+      video {
+        border-radius: 8px;
+        border: 1px solid rgba(0, 0, 0, 0.2);        
+      }
+      
+      .css,
+      .js,
+      .html,
+      .key {
+        font-family: 'Serif';
+        color: black;
+        display: inline-block;
+        padding: 6px 10px 3px 10px;
+        font-size: 25px;
+        line-height: 30px;
+        text-shadow: none;
+        letter-spacing: 0;
+        bottom: 10px;
+        position: relative;
+        border-radius: 10px;
+        -moz-border-radius: 10px;
+        -webkit-border-radius: 10px;
+        background: white;
+        box-shadow: rgba(0, 0, 0, 0.1) 0 2px 5px; 
+        -webkit-box-shadow: rgba(0, 0, 0, 0.1) 0 2px 5px; 
+        -moz-box-shadow: rgba(0, 0, 0, 0.1) 0 2px 5px; 
+      }
+      
+      .key { font-family: Arial; }
+      
+      :not(header) > .css,
+      :not(header) > .js,
+      :not(header) > .html,
+      :not(header) > .key {
+        margin: 0 5px;
+        bottom: 4px;
+      }
+      
+      .css {
+        background: -webkit-gradient(linear, left top, left bottom, from(#ff4), to(#ffa));
+        background-color: #ff4;
+        background: -moz-linear-gradient(left top, #ff4, #ffa);        
+      }
+      .js {
+        background: -webkit-gradient(linear, left top, left bottom, from(#4f4), to(#afa));        
+        background-color: #4f4;
+        background: -moz-linear-gradient(left top, #4f4, #afa);
+      }
+      .html {
+        background: -webkit-gradient(linear, left top, left bottom, from(#e88), to(#fee));
+        background-color: #e88;
+        background: -moz-linear-gradient(left top, #e88, #fee);
+      }
+      
+      li {
+        list-style: none;
+        padding: 10px 0;
+      }
+      
+      .summary li::before, .bullets li::before {
+        content: '· ';
+      }
+      
+      info {
+        display: block;
+        font-size: 50%;
+        text-align: center;
+      }
+      
+    </style>
+  </head><body>
+  <div class="presentation">
+
+	  <div class="slides">
+		  <div class="slide">
+			  <section class="center intro">
+			  <p>This presentation is an HTML5 website</p>
+			  <p>Its format is a direct ripoff of this <a href="http://apirocks.com/html5/html5.html">HTML 5 presentation</a>.</p>
+			  <p>Press <span class="key">&rarr;</span> key to advance.</p>
+			  <p>Zoom in/out: <span class="key">Ctrl or Command</span> + <span class="key">+/-</span></p>
+			  <p style="font-size: 25px">Having issues seeing the presentation? Read the <a href="disclaimer.html">disclaimer</a></p>
+			  </section>
+		  </div>
+
+		  <div class="slide">
+			  <section class="center intro">
+			  <hgroup>
+			  <h1>
+				  perlopquick
+			  </h1>
+			  <h2>
+				  A Perl 5 operator quick reference
+			  </h2>
+			  </hgroup>
+			  </section>
+		  </div>
+
+		  <div class="slide">
+			  <header>perlop is hard for newbies to use</header>
+			  <br /> <br /> <br />
+			  <br /> <br /> <br />
+			  <section>
+			  <h1>What does <code>$wait ||= 5</code> do?</h1>
+			  <ul class="summary">
+				  <li>find <code>||=</code> in perlop</li>
+				  <li>realize you have to read about <code>+=</code> first</li>
+				  <li>understand how <code>+=</code> works</li>
+				  <li>apply that understanding to how <code>||=</code> works</li>
+				  <li>go lookup <code>||</code>
+			  </ul>
+			  </section>
+		  </div>
+
+		  <div class="slide">
+			  <header>perlop doesn't tell you why</header>
+			  <br /> <br /> <br />
+			  <br /> <br /> <br />
+			  <section>
+			  <h1>We still don't know that</h1>
+			  <ul class="summary">
+				  <li>it is a common idiom for setting defaults</li>
+				  <li>it is dangerous (<code>0</code> and empty strings are replaced)</li>
+				  <li>you should probably be using <code>//=</code> instead</li>
+			  </ul>
+			  </section>
+		  </div>
+
+		  <div class="slide">
+			  <header>perlop cannot be parsed</header>
+			  <br /> <br /> <br />
+			  <section>
+			  <h1>It would be nice to be able to say</h1>
+			  <pre>perldoc -O "||="</pre>
+			  <h1>Like we currently do for</h1>
+			  <pre>perldoc -f splice
+perldoc -v "$/"</pre>
+			  <h1>perlopquick is already used by <code>App::Padre</code> to provide context sensitive help for operators</h1>
+			  </section>
+		  </div>
+
+		  <div class="slide">
+			  <header>I am a masochist</header>
+			  <br /> <br /> <br />
+			  <br /> <br /> <br />
+			  <section>
+			  <h1>Initial idea for the docs:</h1>
+			  <pre>=head2 C&lt;X ||= Y>
+
+    This is equivalent to C&lt;X = X || Y>, see C&lt;||> and C&lt;=> for more
+    information.</pre>
+			  </section>
+		  </div>
+
+
+		  <div class="slide">
+			  <header>I am a masochist</header>
+			<section>
+			  <pre style="font-size: 9px">=head2 X ||= Y
+
+    =head3 Class
+
+    This belongs to L&lt;perlop/Assignment Operators>.
+
+    =head3 Description
+
+    This is the logical or assignment operator.  It is equivalent to
+
+        X = X || Y
+
+    That is it logically ors together X and Y and then assigns the result to X.
+    This means that X must be a valid lvalue (i.e. it must be something that can
+    be assigned to).  It was often used in the past to assign a value if the
+    variable did not already have a value:
+
+        my $x;
+
+        #intervening code that might set $x or might leave it undefined
+
+        $x ||= 10; #make sure $x gets set to a default value
+
+    This has a problem though: if C&lt;$x> is C&lt;0> or C&lt;""> then it will get
+    overwritten with C&lt;10>.  The defined-or assignment operator (L&lt;/X //= Y>)
+    does not have this problem and should, generally, be used for this purpose
+    instead.  Of course, if you desire any false value be overwritten, then this
+    is the right operator to use.
+
+    =head3 Example
+
+        my $x = 2;
+        my $y = 8;
+        my $z;
+
+        $x ||= $y; #$x is now 2 || 8 or 2
+        $y ||= $x; #$y is now 8 || 2 or 8
+
+        my $z ||= $x + $y; #$z is now undef || (2 + 8) or 10
+
+    =head3 See also
+
+    L&lt;/X = Y>, L&lt;/X E&lt;verbar>E&lt;verbar> Y>, and L&lt;/X E&lt;sol>E&lt;sol>= Y>
+</pre>
+			  </section>
+
+		  </div>
+
+		  <div class="slide">
+			  <header>I am a masochist</header>
+			  <br /> <br /> <br />
+			  <br /> <br /> <br />
+			  <section>
+			  <h1>Every operator gets four sections:</h1>
+			  <ol class="summary">
+				  <li>The part of perlop it is in</li>
+				  <li>A description of what it does</li>
+				  <li>A block of example code</li>
+				  <li>A list of other operators or topics of interest</li>
+			  </ol>
+			  </section>
+		  </div>
+
+		  <div class="slide">
+			  <header>What can you do?</header>
+			  <br /> <br /> <br />
+			  <section>
+			  <h1>I need help from people willing to:</h1>
+			  <ul class="summary">
+				  <li>proofread it</li>
+				  <li>edit it</li>
+				  <li>test its examples</li>
+				  <li>use it as a reference</li>
+			  </ul>
+			  <h1>So, run out and get it at <a href="http://github.com/cowens/perlopquick">http://github.com/cowens/perlopquick</a></h1>
+			  </section>
+		  </div>
+
+
+	  </div> <!-- slides -->
+    </div> <!-- presentation -->
+    
+    <script>
+      (function() {
+        // Since we don't have the fallback of attachEvent and
+        // other IE only stuff we won't try to run JS for IE.
+        // It will run though when using Google Chrome Frame
+        if (document.all) { return; }
+
+        var currentSlideNo;
+        var notesOn = false;
+        var slides = document.getElementsByClassName('slide');
+        var touchStartX = 0;     
+   
+        // var slide_hash = window.location.hash.replace(/#/, '');
+        // if (slide_hash) {
+        //   for (var i = 0, len = slides.length; i < len; i++) {
+        //     if (slides[i].id == slide_hash) {
+        //       currentSlideNo = i;
+        //       updateSlideClasses(); 
+        //     }
+        //   }
+        // }
+        
+        var spaces = /\s+/, a1 = [""];
+
+        var str2array = function(s) {
+          if (typeof s == "string" || s instanceof String) {
+            if (s.indexOf(" ") < 0) {
+              a1[0] = s;
+              return a1;
+            } else {
+              return s.split(spaces);
+            }
+          }
+          return s;
+        };
+
+        var trim = function(str) {
+          return str.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+        };
+
+        var addClass = function(node, classStr) {
+          classStr = str2array(classStr);
+          var cls = " " + node.className + " ";
+          for (var i = 0, len = classStr.length, c; i < len; ++i) {
+            c = classStr[i];
+            if (c && cls.indexOf(" " + c + " ") < 0) {
+              cls += c + " ";
+            }
+          }
+          node.className = trim(cls);
+        };
+
+        var removeClass = function(node, classStr) {
+          var cls;
+          if (classStr !== undefined) {
+            classStr = str2array(classStr);
+            cls = " " + node.className + " ";
+            for (var i = 0, len = classStr.length; i < len; ++i) {
+              cls = cls.replace(" " + classStr[i] + " ", " ");
+            }
+            cls = trim(cls);
+          } else {
+            cls = "";
+          }
+          if (node.className != cls) {
+            node.className = cls;
+          }
+        };
+
+        var getSlideEl = function(slideNo) {
+          if (slideNo > 0) {
+            return slides[slideNo - 1];
+          } else {
+            return null;
+          }
+        };
+
+        var getSlideTitle = function(slideNo) {
+          var el = getSlideEl(slideNo);
+          
+          if (el) {
+            return el.getElementsByTagName('header')[0].innerHTML;
+          } else {
+            return null;
+          }
+        };
+        
+        var changeSlideElClass = function(slideNo, className) {
+          var el = getSlideEl(slideNo);
+
+          if (el) {
+            removeClass(el, 'far-past past current future far-future');
+            addClass(el, className);
+          }
+        };
+        
+        var updateSlideClasses = function() {
+          window.location.hash = "slide" + currentSlideNo;
+          changeSlideElClass(currentSlideNo - 2, 'far-past');
+          changeSlideElClass(currentSlideNo - 1, 'past');
+          changeSlideElClass(currentSlideNo, 'current');
+          changeSlideElClass(currentSlideNo + 1, 'future');
+          changeSlideElClass(currentSlideNo + 2, 'far-future');                
+        };
+        
+        var nextSlide = function() {
+          if (currentSlideNo < slides.length) {
+            currentSlideNo++;
+          }
+          
+          updateSlideClasses();
+        };
+        
+        var prevSlide = function() {
+          if (currentSlideNo > 1) {
+            currentSlideNo--;
+          }
+          updateSlideClasses();
+        };
+        
+        var handleBodyKeyDown = function(event) {
+          // console.log(event.keyCode);
+          switch (event.keyCode) {
+            case 37: // left arrow
+              prevSlide();
+              break;
+            case 39: // right arrow
+            // case 32: // space
+              nextSlide();
+              break;
+          }
+        };
+
+        var addTouchListeners = function() {
+          document.addEventListener('touchstart', function(e) {
+            touchStartX = e.touches[0].pageX;
+          }, false);
+          document.addEventListener('touchend', function(e) {
+            var pixelsMoved = touchStartX - e.changedTouches[0].pageX;
+            var SWIPE_SIZE = 150;
+            if (pixelsMoved > SWIPE_SIZE) {
+              nextSlide();
+            }
+            else if (pixelsMoved < -SWIPE_SIZE) {
+             prevSlide();
+            }
+          }, false);
+        };
+
+        // initialize
+
+        (function() {
+          if (window.location.hash != "") {
+            currentSlideNo = Number(window.location.hash.replace('#slide', ''));
+          } else {
+            currentSlideNo = 1;
+          }
+   
+          document.addEventListener('keydown', handleBodyKeyDown, false);
+   
+          var els = slides;
+          for (var i = 0, el; el = els[i]; i++) {
+            addClass(el, 'slide far-future');
+          }
+          updateSlideClasses(); 
+
+          // add support for finger events (filter it by property detection?)
+          addTouchListeners();
+        })();
+      })();
+    </script>
+
+    <!--[if IE]>
+		<script src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"></script> 
+		<script>CFInstall.check({ mode: "overlay" });</script> 
+    <![endif]--> 
+	<script type="text/javascript"> 
+		var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+		document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+	</script> 
+	<script type="text/javascript"> 
+		var pageTracker = _gat._getTracker("UA-2579543-2");
+		pageTracker._initData();
+		pageTracker._trackPageview();
+	</script> 
+</body>
+</html>
